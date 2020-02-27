@@ -8,18 +8,21 @@ module.exports = function (WebHook_url, proxy) {
             "text": text,
             "title": title
         };
-        request.post({
-            url: this.url,
-            body: message,
-            proxy: this.proxy,
-            json: true,
-        }, function Callback(err, httpResponse, body) {
-            if (err) {
-                return console.error('upload failed:', err);
-            }
-            console.log(`Http code: ${httpResponse.statusCode}`);
-            console.log(`Upload successful! Server responded with ${body}`);
-        });
+        this.url.forEach((url, index) => {
+            request.post({
+                url: url,
+                body: message,
+                proxy: this.proxy[index],
+                json: true,
+            }, function Callback(err, httpResponse, body) {
+                if (err) {
+                    return console.error('upload failed:', err);
+                }
+                console.log(`Http code: ${httpResponse.statusCode}`);
+                console.log(`Upload successful! Server responded with ${body}`);
+            });
+        })
+
     }
 };
 
