@@ -1,7 +1,8 @@
-module.exports = function (socketIP, socketPort, groups) {
+module.exports = function (socketIP, socketPort, groups, mailer) {
     this.socketIP = socketIP; /* PLC IP */
     this.socketPort = socketPort; /* PLC port */
     this.groups = groups; /* Teams groups */
+    this.mailer = mailer;
 
     /* PLC Connection and sending message to Teams groups */
     this.connect = function () {
@@ -35,6 +36,7 @@ module.exports = function (socketIP, socketPort, groups) {
                         text = `Fire alert all-clear`;
                     }
                     this.groups.forEach(group => group.sendMessage(text, title));
+                    this.mailer.send(text, title);
                     console.log(`Fire alert: ${Fire}`);
                 }
 
@@ -48,6 +50,7 @@ module.exports = function (socketIP, socketPort, groups) {
                         text = `Earthquake alert all-clear`;
                     }
                     this.groups.forEach(group => group.sendMessage(text, title));
+                    this.mailer.send(text, title);
                     console.log(`Earthquake alert: ${Eq}`);
                 }
                preStr = str; preFire = Fire; preEq = Eq;
